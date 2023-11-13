@@ -1,7 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-
-<q-list bordered class="rounded-borders" style="max-width: 600px">
+    <q-list bordered class="rounded-borders" style="max-width: 600px">
       <q-item-label header>
         Lugares
         <q-btn flat color="primary" label="Agregar" @click="$router.push('/nuevo-lugar')"/>
