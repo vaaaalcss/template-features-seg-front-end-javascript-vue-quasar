@@ -38,6 +38,7 @@
 						@click="savePlace()"
 						v-if="!placeValue.id" />
 					<q-btn
+						unelevated
 						color="primary"
 						label="Actualizar"
 						@click="updatePlace()"

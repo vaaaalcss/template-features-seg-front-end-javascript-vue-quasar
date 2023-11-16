@@ -3,10 +3,19 @@
     <q-header unelevated class="bg-indigo-10">
       <q-toolbar>
         <q-toolbar-title @click="$router.push('/')" class="cursor-pointer">
-          Template Front End
+          Template Front End v.1.0.0
         </q-toolbar-title>
 
-        <div>v.1.0.0</div>
+        <div>
+          <q-btn
+            flat
+            dense
+            no-wrap
+            color="white"
+            no-caps
+            label="Salir"
+            @click="logout()" />
+        </div>
       </q-toolbar>
     </q-header>
     <q-page-container>
@@ -14,3 +23,21 @@
     </q-page-container>
   </q-layout>
 </template>
+
+<script setup>
+  import { ref } from 'vue'
+  import { api } from 'boot/axios'
+  import { useRouter } from "vue-router";
+  const $router = useRouter()
+
+  function logout(){
+    api.get('logout')
+      .then(response => {
+        sessionStorage.removeItem('security-token');
+        $router.push('/ingresar');
+      })
+      .catch(error => {
+
+      });
+  }
+</script>

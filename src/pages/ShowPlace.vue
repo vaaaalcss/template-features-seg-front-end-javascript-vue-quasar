@@ -1,7 +1,15 @@
 <template>
-	Editando
-	<h6>{{ place ? place.name : null }}</h6>
-	<p>Horario de servicio: {{ place ? place.open : null}} </p>
+	<q-page class="flex flex-center">
+		<q-card style="max-width: 600px;" flat bordered>
+			<q-card-section>
+			<div class="text-h6">{{ place ? place.name : null }}</div>
+			</q-card-section>
+
+			<q-card-section class="q-pt-none">
+				<p>Horario de servicio: {{ place ? place.open : null}} </p>
+			</q-card-section>
+		</q-card>
+	</q-page>
 </template>
 
 <script setup>
