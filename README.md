@@ -43,6 +43,7 @@ El borrado lógico permite marcar registros como "eliminados" sin eliminar físi
 Satisface el control de seguridad:
 - [Information deletion](https://www.iso.org/standard/27001)
 - [Information backup](https://www.iso.org/standard/27001)
+
 Esto permite mantener un historial de cambios en la base de datos, lo que puede ser útil en situaciones en las que es importante conservar versiones anteriores de los datos. 
 
 6.-
