@@ -10,9 +10,10 @@
 
 
 const { configure } = require('quasar/wrappers');
+let JavaScriptObfuscator = require('webpack-obfuscator');
 const path = require('path');
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function ( ctx ) {
   return {
     eslint: {
       // fix: true,
@@ -80,6 +81,38 @@ module.exports = configure(function (/* ctx */) {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
+
+      extendWebpack(cfg) {
+          if ( !ctx.dev && !ctx.debug ) {
+            cfg.plugins.push(new JavaScriptObfuscator({
+              compact: true,
+              controlFlowFlattening: false,
+              deadCodeInjection: false,
+              debugProtection: false,
+              debugProtectionInterval: 0,
+              disableConsoleOutput: true,
+              identifierNamesGenerator: 'hexadecimal',
+              log: false,
+              numbersToExpressions: false,
+              renameGlobals: false,
+              selfDefending: true,
+              simplify: true,
+              splitStrings: true,
+              stringArray: true,
+              stringArrayCallsTransform: false,
+              stringArrayEncoding: [],
+              stringArrayIndexShift: true,
+              stringArrayRotate: true,
+              stringArrayShuffle: true,
+              stringArrayWrappersCount: 1,
+              stringArrayWrappersChainedCalls: true,
+              stringArrayWrappersParametersMaxCount: 2,
+              stringArrayWrappersType: 'variable',
+              stringArrayThreshold: 0.75,
+              unicodeEscapeSequence: false
+            }))
+          }
+      },
 
       vitePlugins: [
         ['@intlify/vite-plugin-vue-i18n', {

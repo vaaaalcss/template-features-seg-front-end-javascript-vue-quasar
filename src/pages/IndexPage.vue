@@ -19,9 +19,9 @@
 
         <q-item-section top side>
           <div class="text-grey-8 q-gutter-xs">
-            <q-btn class="gt-xs" size="12px" flat dense round icon="visibility" @click="$router.push('/ver-lugar/' + place.id)"/>
-            <q-btn size="12px" flat dense round icon="edit" @click="$router.push('/editar-lugar/' + place.id)" />
-            <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="deletePlace(place.id)"/>
+            <q-btn class="gt-xs" size="12px" flat dense round icon="visibility" @click="$router.push('/ver-lugar/' + place.hash)"/>
+            <q-btn size="12px" flat dense round icon="edit" @click="$router.push('/editar-lugar/' + place.hash)" />
+            <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="deletePlace(place.hash)"/>
           </div>
         </q-item-section>
       </q-item>
@@ -45,8 +45,8 @@ function getPlaces(){
     });
 }
 
-function deletePlace(id){
-  api.delete(`/places/${id}`)
+function deletePlace(hash){
+  api.delete(`/places/${hash}`)
     .then(response => {
       getPlaces();
     })

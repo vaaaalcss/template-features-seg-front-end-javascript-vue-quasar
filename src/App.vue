@@ -1,5 +1,5 @@
 <template>
-  <v-idle @idle="onIdle" :duration="1 * 60" v-show="true" style="border: 1px solid red; height: 100px;" />
+  <v-idle @idle="onIdle" :duration="10 * 60" v-show="false" />
   <router-view />
 </template>
 

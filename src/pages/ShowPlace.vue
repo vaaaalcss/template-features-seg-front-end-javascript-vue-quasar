@@ -16,10 +16,10 @@
 	import { api } from 'boot/axios';
 	import { ref } from 'vue';
 
-	const placeValue = defineProps(['id'])
+	const placeValue = defineProps(['hash'])
 	const place = ref(null);
 
-	api.get('/places/' + placeValue.id)
+	api.get('/places/' + placeValue.hash)
 		.then(response => {
 			place.value = response.data.place;
 		})
