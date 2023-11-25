@@ -54,18 +54,19 @@
 	import { ref } from 'vue'
 	import { useRouter } from "vue-router";
 	const $router = useRouter()
-	const placeValue = defineProps(['id'])
+	const placeValue = defineProps(['hash'])
+	import CryptoJS from 'crypto-js';
 
 	const name = ref(null);
 	const open = ref(null);
 	const postalCode = ref(null);
 
-	if( placeValue.id ){
+	if( placeValue.hash ){
 		getPlaceInfo(placeValue.id);
 	}
 
 	function getPlaceInfo(id){
-		api.get('/places/' + placeValue.id)
+		api.get('/places/' + placeValue.hash)
 			.then(response => {
 				name.value = response.data.place.name;
 				open.value = response.data.place.open;
@@ -78,7 +79,13 @@
 
 	function savePlace(){
 		if( name.value != null && open.value != null ){
-			api.post('/places', { name: name.value, open: open.value, postalCode: postalCode.value })
+			let data = {
+				name: name.value,
+				open: open.value,
+				postalCode: postalCode.value
+			};
+
+			api.post('/places', data)
 				.then(response => {
 					$router.push('/');
 				})
@@ -89,7 +96,13 @@
 
 	function updatePlace()
 	{
-		api.put('/places/' + placeValue.id, { name: name.value, open: open.value})
+		let data = {
+			name: name.value,
+			open: open.value,
+			postalCode: postalCode.value
+		};
+
+		api.put('/places/' + placeValue.hash, data)
 			.then(response => {
 				$router.push('/');
 			})

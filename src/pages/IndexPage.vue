@@ -32,6 +32,7 @@
 <script setup>
 import { api } from 'boot/axios'
 import { ref } from 'vue'
+import CryptoJS from 'crypto-js';
 
 const places = ref([]);
 
@@ -41,7 +42,7 @@ function getPlaces(){
       places.value = response.data.places;
     })
     .catch(error => {
-
+      console.log(error);
     });
 }
 
