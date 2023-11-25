@@ -14,12 +14,28 @@ function getIv(length){
   return iv;
 }
 
-function encryptData(data, encryptKey){
+function decrypt(data, secretKey){
+    const info = data.split('|');
+    const encrypted = info[0];
+    const iv = atob(info[1]);
+
+    const decrypted = CryptoJS.AES.decrypt(
+      encrypted,
+      CryptoJS.enc.Utf8.parse(secretKey),
+      {
+        iv: CryptoJS.enc.Utf8.parse(iv)
+      }
+    ).toString(CryptoJS.enc.Utf8);
+
+    return decrypted;
+}
+
+function encrypt(data, secretKey){
     let iv = getIv(16);
 
     let encrypted = CryptoJS.AES.encrypt(
       JSON.stringify(data),
-      CryptoJS.enc.Utf8.parse(encryptKey),
+      CryptoJS.enc.Utf8.parse(secretKey),
       {
         iv: CryptoJS.enc.Utf8.parse(iv)
       }
@@ -27,47 +43,26 @@ function encryptData(data, encryptKey){
 
     encrypted = encrypted + '|' + btoa(iv);
 
-    console.log({encrypted});
-    console.log({ decryptedLocal: decryptData(encrypted, 'oNSSASxLVso2ayG9gefIaDqn89y63z8C') });
-
     return encrypted;
-}
-
-function decryptData(data, encryptKey){
-  const info = data.split('|');
-  const encrypted = info[0];
-  const iv = atob(info[1]);
-
-  const decrypted = CryptoJS.AES.decrypt(
-    encrypted,
-    CryptoJS.enc.Utf8.parse(encryptKey),
-    {
-      iv: CryptoJS.enc.Utf8.parse(iv)
-    }
-  ).toString(CryptoJS.enc.Utf8);
-
-  console.log({decrypted});
-
-  return decrypted;
 }
 
 export default boot(async () => {
   const encryptApi = true;
-  const encryptKey = 'oNSSASxLVso2ayG9gefIaDqn89y63z8C';
+  const secretKey = 'oNSSASxLVso2ayG9gefIaDqn89y63z8C';
 
   api.interceptors.request.use(
     request => {
       if ( encryptApi === true ){
         if ( request && request.data ){
           const requestData = JSON.stringify(request.data);
-          const encryptedData = encryptData(requestData, encryptKey);
+          const encryptedData = encrypt(requestData, secretKey);
 
           request.data = { 'encrypted': encryptedData };
         }
 
         if ( request && request.params ) {
           const requestParams = JSON.stringify(request.params);
-          const encryptedParams = encryptData(requestParams, encryptKey);
+          const encryptedParams = encrypt(requestParams, secretKey);
 
           request.params = { 'encryptedParams': encryptedParams };
         }
@@ -84,7 +79,7 @@ export default boot(async () => {
     response => {
       if ( encryptApi === true ) {
         if ( response && response.data.encrypted ) {
-          const decryptedData = decryptData(response.data.encrypted, encryptKey);
+          const decryptedData = decrypt(response.data.encrypted, secretKey);
           response.data = JSON.parse(decryptedData);
         }
       }
@@ -95,4 +90,4 @@ export default boot(async () => {
       return Promise.reject(error);
     }
   );
-})
+});

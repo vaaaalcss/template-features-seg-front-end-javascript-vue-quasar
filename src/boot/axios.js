@@ -7,6 +7,7 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
+
 const api = axios.create({
     baseURL: 'http://localhost:8000/api',
     headers: {
@@ -15,33 +16,47 @@ const api = axios.create({
     }
 })
 
-// Add token
-api.interceptors.request.use(
-    function(config) {
+export default boot(({ app, router }) => {
+    // Add token
+    api.interceptors.request.use(
+        request => {
 
-        const token = sessionStorage.getItem('security-token');
+            const token = sessionStorage.getItem('security-token');
 
-        if ( token ) {
-            config.headers.Authorization = 'Bearer ' + token;
+            if ( token ) {
+                request.headers.Authorization = 'Bearer ' + token;
+            }
+
+            return request;
+        },
+        error => {
+            return Promise.reject(error);
         }
+    );
 
-        return config;
-    },
-    function(error) {
-        return Promise.reject(error);
-    }
-);
+    // 401 response handler
+    api.interceptors.response.use(
+        response => {
+            return response;
+        },
+        error => {
+            if( error.response.status === 401 ){
+                router.push('/ingresar');
+            }
 
-export default boot(({ app }) => {
-  // for use inside Vue files (Options API) through this.$axios and this.$api
+            return Promise.reject(error);
+        }
+    );
 
-  app.config.globalProperties.$axios = axios
-  // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
-  //       so you won't necessarily have to import axios in each vue file
+    // for use inside Vue files (Options API) through this.$axios and this.$api
 
-  app.config.globalProperties.$api = api
-  // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
-  //       so you can easily perform requests against your app's API
+    app.config.globalProperties.$axios = axios
+    // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
+    //       so you won't necessarily have to import axios in each vue file
+
+    app.config.globalProperties.$api = api
+    // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
+    //       so you can easily perform requests against your app's API
 })
 
 export { api }

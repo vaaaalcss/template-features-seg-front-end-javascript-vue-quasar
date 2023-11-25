@@ -3,7 +3,7 @@
     <q-header unelevated class="bg-indigo-10">
       <q-toolbar>
         <q-toolbar-title @click="$router.push('/')" class="cursor-pointer">
-          Template Front End v.1.0.0
+          TCSFEVQ v.1.0.0
         </q-toolbar-title>
 
         <div>
