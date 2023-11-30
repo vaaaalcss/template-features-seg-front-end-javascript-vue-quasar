@@ -9,7 +9,7 @@ import axios from 'axios'
 // for each client)
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api',
+    baseURL: 'https://api-template-seg.castillor.com/api',
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
         Accept: 'application/json'
