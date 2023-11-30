@@ -25,7 +25,6 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue'
   import { api } from 'boot/axios'
   import { useRouter } from "vue-router";
   const $router = useRouter()

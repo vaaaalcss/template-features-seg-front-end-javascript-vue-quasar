@@ -8,7 +8,7 @@
 			<q-card-section class="q-pt-none">
 				<q-form class="q-gutter-md">
 					<q-input
-						v-my-only-alphanumeric
+						
 						square
 						outlined
 						v-model="name"
@@ -36,13 +36,13 @@
 						color="primary"
 						label="Guardar"
 						@click="savePlace()"
-						v-if="!placeValue.id" />
+						v-if="!placeValue.hash" />
 					<q-btn
 						unelevated
 						color="primary"
 						label="Actualizar"
 						@click="updatePlace()"
-						v-if="placeValue.id"/>
+						v-if="placeValue.hash"/>
 				</q-form>
 			</q-card-section>
 		</q-card>
@@ -62,7 +62,7 @@
 	const postalCode = ref(null);
 
 	if( placeValue.hash ){
-		getPlaceInfo(placeValue.id);
+		getPlaceInfo(placeValue.hash);
 	}
 
 	function getPlaceInfo(id){
